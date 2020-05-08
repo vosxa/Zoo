@@ -7,27 +7,54 @@ import java.util.List;
 import be.belfius.zoo.domain.Animal;
 import be.belfius.zoo.domain.Bear;
 import be.belfius.zoo.domain.Lion;
+import be.belfius.zoo.domain.Snake;
+import be.belfius.zoo.domain.Tiger;
 import be.belfius.zoo.domain.enums.AnimalType;
+
+import java.sql.*;
 
 public class AnimalRepository {
 	private List<Animal> animals = new ArrayList<>();
-
-	public AnimalRepository() {
-		Bear bear = new Bear(AnimalType.BEAR, "Baloe");
-		animals.add(bear);
-
-		Lion lion = new Lion(AnimalType.LION, "King");
-		animals.add(lion);
-
-	}
+	private List<Animal> dbAnimals = new ArrayList<>();
 
 	public List<Animal> getAllAnimals() {
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/zoo", "root", "");) {
+//			Connection connection = DriverManager.getConnection(Helper.loadPropertiesFile().getProperty("db.url"), "root", "root");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			Statement statement = connection.createStatement();
+			statement.execute("select * from Animal");
+			ResultSet resultSet = statement.getResultSet();
+
+			while (resultSet.next()) {
+				switch (resultSet.getString("type")) {
+				case "BEAR":
+					Bear bear = new Bear(AnimalType.BEAR, resultSet.getString("name"));
+					dbAnimals.add(bear);
+					break;
+				case "LION":
+					Lion lion = new Lion(AnimalType.LION, resultSet.getString("name"));
+					dbAnimals.add(lion);
+					break;
+				case "TIGER":
+					Tiger tiger = new Tiger(AnimalType.TIGER, resultSet.getString("name"));
+					dbAnimals.add(tiger);
+					break;
+				case "SNAKE":
+					Snake snake = new Snake(AnimalType.SNAKE, resultSet.getString("name"));
+					dbAnimals.add(snake);
+					break;
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		sortByAnimalNames();
-		return animals;
+		return dbAnimals;
 	}
 
 	public void sortByAnimalNames() {
-		Collections.sort(animals);
+		Collections.sort(dbAnimals);
 	}
 
 	public Animal getOneAnimal(Animal getAnimal) {
@@ -38,7 +65,7 @@ public class AnimalRepository {
 				continue;
 			}
 		}
-		
+
 		return foundAnimal;
 	}
 

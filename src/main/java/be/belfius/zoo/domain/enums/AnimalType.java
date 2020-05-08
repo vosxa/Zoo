@@ -3,7 +3,7 @@ package be.belfius.zoo.domain.enums;
 import be.belfius.zoo.exceptions.InvalidAnimalTypeException;
 
 public enum AnimalType {
-	BEAR("Bear"), LION("Lion"), TIGER("Tiger");
+	BEAR("Bear"), LION("Lion"), TIGER("Tiger"), SNAKE("Snake");
 
 	private String animalDescr;
 
