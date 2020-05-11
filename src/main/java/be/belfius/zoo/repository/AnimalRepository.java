@@ -2,7 +2,10 @@ package be.belfius.zoo.repository;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import be.belfius.zoo.domain.Animal;
 import be.belfius.zoo.domain.Bear;
@@ -15,9 +18,11 @@ import java.sql.*;
 
 public class AnimalRepository {
 	private List<Animal> animals = new ArrayList<>();
-	private List<Animal> dbAnimals = new ArrayList<>();
 
-	public List<Animal> getAllAnimals() {
+	private Map<String, String> dbAnimals = new HashMap<String, String>();
+	private LinkedHashMap<String, String> dbAnimalsSorted = new LinkedHashMap<>();
+
+	public Map<String, String> getAllAnimals() {
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/zoo", "root", "");) {
 //			Connection connection = DriverManager.getConnection(Helper.loadPropertiesFile().getProperty("db.url"), "root", "root");
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -27,34 +32,15 @@ public class AnimalRepository {
 			ResultSet resultSet = statement.getResultSet();
 
 			while (resultSet.next()) {
-				switch (resultSet.getString("type")) {
-				case "BEAR":
-					Bear bear = new Bear(AnimalType.BEAR, resultSet.getString("name"));
-					dbAnimals.add(bear);
-					break;
-				case "LION":
-					Lion lion = new Lion(AnimalType.LION, resultSet.getString("name"));
-					dbAnimals.add(lion);
-					break;
-				case "TIGER":
-					Tiger tiger = new Tiger(AnimalType.TIGER, resultSet.getString("name"));
-					dbAnimals.add(tiger);
-					break;
-				case "SNAKE":
-					Snake snake = new Snake(AnimalType.SNAKE, resultSet.getString("name"));
-					dbAnimals.add(snake);
-					break;
-				}
+				dbAnimals.put(resultSet.getString("type"), resultSet.getString("name"));
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		sortByAnimalNames();
-		return dbAnimals;
-	}
+		dbAnimals.entrySet().stream().sorted(Map.Entry.comparingByValue())
+				.forEachOrdered(x -> dbAnimalsSorted.put(x.getKey(), x.getValue()));
 
-	public void sortByAnimalNames() {
-		Collections.sort(dbAnimals);
+		return dbAnimalsSorted;
 	}
 
 	public Animal getOneAnimal(Animal getAnimal) {
@@ -99,9 +85,9 @@ public class AnimalRepository {
 		List<Animal> foundAnimalsList = new ArrayList<>();
 
 		for (Animal oneAnimal : animals) {
-			if (oneAnimal.getAnimalType().equals(getAnimal.getAnimalType())) {
-				foundAnimalsList.add(oneAnimal);
-			}
+//			if (oneAnimal.getAnimalType().equals(getAnimal.getAnimalType())) {
+//				foundAnimalsList.add(oneAnimal);
+//			}
 		}
 		return foundAnimalsList;
 	}

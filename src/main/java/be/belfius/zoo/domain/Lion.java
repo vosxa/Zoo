@@ -4,7 +4,7 @@ import be.belfius.zoo.domain.enums.AnimalType;
 
 public class Lion extends Animal {
 
-	public Lion(AnimalType animalType, String name) {
+	public Lion(/*AnimalType*/String animalType, String name) {
 		super(animalType, name);
 	}
 

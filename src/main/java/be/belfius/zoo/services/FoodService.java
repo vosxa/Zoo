@@ -47,10 +47,10 @@ public class FoodService {
 			}		
 		}	
 		
-		if (!oneDietLineFound)  {
+/*		if (!oneDietLineFound)  {
 			throw new DietNotFoundException(hungryAnimal.getAnimalType());
 			}
-		}
+*/		}
 	
 	private List<DietByAnimalType> getDiet(Animal hungryAnimal) {
 		List<DietByAnimalType> dietHungryAnimal=foodRepository.getDiet(hungryAnimal);

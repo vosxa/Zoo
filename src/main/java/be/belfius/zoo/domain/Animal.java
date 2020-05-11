@@ -4,10 +4,10 @@ import be.belfius.zoo.domain.enums.AnimalType;
 
 public abstract class Animal implements Comparable<Animal> {
 
-	private AnimalType animalType;
+	private /*AnimalType*/String animalType;
 	private String name;
 
-	public Animal(AnimalType animalType, String name) {
+	public Animal(/*AnimalType*/String animalType, String name) {
 		super();
 		this.animalType = animalType;
 		this.name = name;
@@ -26,11 +26,11 @@ public abstract class Animal implements Comparable<Animal> {
 		this.name = name;
 	}
 
-	public AnimalType getAnimalType() {
+/*	public AnimalType getAnimalType() {
 		return animalType;
 	}
-
-	public void setAnimalType(AnimalType animalType) {
+*/
+	public void setAnimalType(/*AnimalType*/String animalType) {
 		this.animalType = animalType;
 	}
 

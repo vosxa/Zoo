@@ -1,5 +1,12 @@
 package be.belfius.zoo.domain.enums;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Map;
+
 import be.belfius.zoo.exceptions.InvalidAnimalTypeException;
 
 public enum AnimalType {
@@ -16,14 +23,14 @@ public enum AnimalType {
 	}
 
 	public static AnimalType findAnimalTypefromDescr(String animalDesc) throws InvalidAnimalTypeException {
-		AnimalType myReturn=null;
+		AnimalType myReturn = null;
 		for (AnimalType animalType : AnimalType.values()) {
 			if (animalType.getAnimalDescr().equals(animalDesc)) {
 				myReturn = animalType;
 			}
 		}
-		
-		if (myReturn==null) { 
+
+		if (myReturn == null) {
 			throw new InvalidAnimalTypeException(animalDesc);
 		}
 		return myReturn;
@@ -31,11 +38,21 @@ public enum AnimalType {
 
 	public static String getValidAnimalTypes() {
 		String myReturn = "";
-		
-		for (AnimalType animalType : AnimalType.values()) {
-			myReturn = myReturn + animalType.getAnimalDescr() + " " ;
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/zoo", "root", "");) {
+//			Connection connection = DriverManager.getConnection(Helper.loadPropertiesFile().getProperty("db.url"), "root", "root");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			Statement statement = connection.createStatement();
+			statement.execute("select * from AnimalType");
+			ResultSet resultSet = statement.getResultSet();
+
+			while (resultSet.next()) {
+				if (myReturn == "") myReturn = myReturn + resultSet.getString("type");
+				else myReturn = myReturn + "," + resultSet.getString("type");
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		
 		return myReturn;
 	}
 }

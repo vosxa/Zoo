@@ -88,10 +88,10 @@ public class FoodRepository {
 	public List<DietByAnimalType> getDiet(Animal hungryAnimal) {
 		List<DietByAnimalType> foundDiet = new ArrayList<>();
 		for (DietByAnimalType oneDiet : diet) {
-			if (oneDiet.getAnimalType() == hungryAnimal.getAnimalType()) {
+/*			if (oneDiet.getAnimalType() == hungryAnimal.getAnimalType()) {
 				foundDiet.add(oneDiet);
 			}
-		}
+*/		}
 		return foundDiet;
 	}
 
