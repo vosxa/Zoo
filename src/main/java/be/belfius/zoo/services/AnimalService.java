@@ -73,9 +73,9 @@ public class AnimalService {
 		return animalRepository.getAllAnimals();
 	}
 
-	public Animal getOneAnimal(Bear bear) {
-		return animalRepository.getOneAnimal(bear);
-	}
+//	public Animal getOneAnimal(Bear bear) {
+//		return animalRepository.getOneAnimal(bear);
+//	}
 
 	/*
 	 * public AnimalType findAnimalType(String inAnimalType) throws

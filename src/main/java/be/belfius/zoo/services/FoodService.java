@@ -29,23 +29,23 @@ public class FoodService {
 	public void feedOneAnimal(String mAnimalName, AnimalService animalService) throws InvalidAnimalException, DietNotFoundException, FoodisEmptyException  {
 		boolean oneDietLineFound = false;
 		
-		Animal hungryAnimal =
-		(Animal) animalService.getOneAnimal(new Bear(null,mAnimalName));
+//		Animal hungryAnimal =
+//		(Animal) animalService.getOneAnimal(new Bear(null,mAnimalName));
 
-		if (hungryAnimal.getName() == null) {throw new InvalidAnimalException(mAnimalName) ;}
+//		if (hungryAnimal.getName() == null) {throw new InvalidAnimalException(mAnimalName) ;}
 	
 		//  backup nemen van diet
 		List<Food> foodBU=foodRepository.backup();
 		
-		for (DietByAnimalType oneDietLine : getDiet(hungryAnimal)) {
-			oneDietLineFound=true;
-			try {
-				foodRepository.takeFood(oneDietLine);
-			} catch (FoodisEmptyException e) {
-				foodRepository.restoreBU(foodBU);
-				throw new FoodisEmptyException();
-			}		
-		}	
+//		for (DietByAnimalType oneDietLine : getDiet(hungryAnimal)) {
+//			oneDietLineFound=true;
+//			try {
+//				foodRepository.takeFood(oneDietLine);
+//			} catch (FoodisEmptyException e) {
+//				foodRepository.restoreBU(foodBU);
+//				throw new FoodisEmptyException();
+//			}		
+//		}	
 		
 /*		if (!oneDietLineFound)  {
 			throw new DietNotFoundException(hungryAnimal.getAnimalType());
